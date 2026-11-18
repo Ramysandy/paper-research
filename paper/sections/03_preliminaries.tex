@@ -1,0 +1,35 @@
+\section{Preliminaries and Problem Formulation}
+\label{sec:prelim}
+
+\paragraph{Generation.} A causal language model $M$ over vocabulary $\V$ maps a prefix $x_{<t}$ to logits $\ell_t\in\mathbb{R}^{|\V|}$. A task $\tau\in\T$ supplies a prompt, and a sampling seed $s\in\Sd$ fixes the pseudo-random stream used by temperature and nucleus (top-$p$) sampling. We write $y=\mathrm{Gen}(M,\tau,s,\kappa)$ for the token sequence generated under key $\kappa$, and $\kappa=\Base$ for unwatermarked generation.
+
+\paragraph{KGW watermarking.} Fix a greenlist ratio $\gamma\in(0,1)$, a bias $\delta>0$, a context width $h$, and a key $\kappa\in\K$. A keyed pseudo-random function $\pi_\kappa$ maps the last $h$ tokens, and under self-hashing also the candidate token, to a green list $\G_t\subset\V$ with $|\G_t|=\lfloor\gamma|\V|\rfloor$. The processor adds $\delta$ to the logit of each green token:
+\begin{equation}
+\tilde\ell_{t,v}=\ell_{t,v}+\delta\,\mathbb{1}[v\in\G_t],\qquad v\in\V,
+\label{eq:kgw}
+\end{equation}
+and sampling proceeds from $\mathrm{softmax}(\tilde\ell_t/T_{\mathrm{temp}})$ truncated to the top-$p$ mass. Under self-hashing \citep{kirchenbauer2024reliability}, a candidate counts as green only if it lies in the list seeded by itself; the reference implementation checks a bounded number of high-scoring candidates per step.
+
+\paragraph{Detection.} Given $T$ scored tokens of which $g$ are green under $\kappa$, the detector computes
+\begin{equation}
+z_\kappa(y)=\frac{g-\gamma T}{\sqrt{T\gamma(1-\gamma)}},
+\label{eq:z}
+\end{equation}
+and declares the output watermarked when $z_\kappa(y)\ge z^\star$. We fix $z^\star=4$ in advance. Under the null hypothesis that $y$ is independent of $\kappa$ and that green hits are independent with probability $\gamma$, $z$ is approximately standard normal. Code violates the independence premise through repeated $n$-grams, which is one reason we require an empirical, key-specific null (Section~\ref{sec:gates}).
+
+\paragraph{Outcomes.} An evaluator assigns each extracted program a functional label $\Fn\in\{0,1\}$ and a security label $\Sec\in\{0,1,\bot\}$, where $\bot$ marks indeterminate evidence. The primary endpoint is
+\begin{equation}
+\Y=\Fn\cdot\mathbb{1}[\Sec=1],
+\label{eq:endpoint}
+\end{equation}
+so a program that never runs cannot count as a security success. For an arm $\kappa$ we define the task-averaged rate $\mu_\kappa=\frac{1}{|\T||\Sd|}\sum_{\tau,s}\E[\Y\mid\tau,s,\kappa]$, where the expectation is over any remaining generation randomness.
+
+\begin{definition}[Estimands]\label{def:estimands}
+For a set of valid keys $\K_n=\{\kappa_1,\dots,\kappa_n\}$ drawn uniformly from $\K$, define the per-key effect $\Delta_k=\mu_{\kappa_k}-\mu_\Base$, the \emph{average KGW effect} $\ATE=\E_{\kappa}[\mu_\kappa]-\mu_\Base$, and the \emph{between-key heterogeneity} $\sigma^2_{\K}=\Var_{\kappa}(\mu_\kappa)$.
+\end{definition}
+
+\begin{definition}[Key-interchangeability problem]\label{def:problem}
+Given $M$, fixed $(\gamma,\delta,h)$, decoding parameters, tasks $\T$ and seeds $\Sd$, test $H_0:\sigma^2_\K=0$ against $\sigma^2_\K>0$, and estimate $\ATE$, \emph{conditional on} (i) the watermark manipulation being verified for every key (Section~\ref{sec:gates}) and (ii) the security oracle being non-degenerate on $\T$.
+\end{definition}
+
+Conditions (i) and (ii) belong to the problem statement. Without (i), a key that does not actually bias generation is indistinguishable from an unwatermarked run. Without (ii), $\sigma^2_\K$ for $\Y$ collapses to heterogeneity in $\Fn$ alone.

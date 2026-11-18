@@ -1,0 +1,15 @@
+\section{Discussion, Limitations and Conclusion}
+\label{sec:conclusion}
+
+\paragraph{What the evidence supports.} Under one model and one KGW configuration, (i) the KGW intervention is active and graded: every watermarked output differed from its baseline, and detector strength rose monotonically with $\delta$; and (ii) valid keys were associated with very different functional pass rates on the same 24 tasks and seeds. Proposition~\ref{prop:baseline} shows that this between-key contrast does not depend on the noisy shared baseline.
+
+\paragraph{What it does not support.} The pilot does not show that any key makes code less secure. It does not identify a ``weak'' key; K0001's poor combined score is a functionality failure. It does not estimate the average cost of watermarking, and it does not generalise beyond Qwen2.5-Coder-7B-Instruct, KGW and C/Python. Two observations argue for caution even about the functional spread: weak and, for half of the keys, negative matching-key $z$ values, and the absence of any relation between watermark strength and functionality. A key-specific application or scoring defect could produce the same pattern. Reporting the spread together with these diagnostics is, we believe, more useful than reporting either alone.
+
+\paragraph{Limitations.} The study has one model, ten keys, 24 pilot tasks, saturated security oracles, aggregate-only intervals that ignore clustering, and a pilot whose model revision was not pinned to a commit. No external benchmark has yet been run.
+
+\paragraph{Next steps.} The order is fixed by the gates: cross-score identical baseline outputs under every key and verify token-level green-hit alignment (Gate N); repair saturated oracles and integrate CWEval unchanged (Gate O); rerun the ten-key pilot; and only then run the preregistered 100-key, 240-task study with discovery-only tail selection and held-out validation. Extensions to other models and to Unigram, SWEET and distortion-free schemes would test whether any confirmed heterogeneity is specific to KGW's context-dependent partitions.
+
+\paragraph{Conclusion.} Treating watermark keys as interchangeable is an empirical assumption, and for code it can be tested. We gave a formulation that separates watermark cost from key choice, a fail-closed protocol for measuring both, and pilot evidence that is strong enough to motivate the question but too weak to answer it.
+
+\section*{Ethical Statement}
+Showing that some valid keys degrade code security would have dual-use implications: an adversary with influence over key choice could select harmful keys. Our protocol therefore keeps raw key values, ranked key lists and generated programs private, and publishes only opaque labels and aggregate statistics. Generated code is executed only inside a networkless, resource-limited sandbox. We will not release an operational key-search tool or validated harmful key values without a responsible-disclosure review. No human subjects or personal data are involved.

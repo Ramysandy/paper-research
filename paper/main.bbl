@@ -1,0 +1,168 @@
+\begin{thebibliography}{23}
+\providecommand{\natexlab}[1]{#1}
+
+\bibitem[{Bhatt et~al.(2023)}]{bhatt2023cyberseceval}
+Bhatt, M.; et~al. 2023.
+\newblock Purple {Llama} {CyberSecEval}: A Secure Coding Benchmark for Language
+  Models.
+\newblock \emph{arXiv preprint arXiv:2312.04724}.
+
+\bibitem[{Dathathri et~al.(2024)}]{dathathri2024scalable}
+Dathathri, S.; et~al. 2024.
+\newblock Scalable Watermarking for Identifying Large Language Model Outputs.
+\newblock \emph{Nature}, 634(8035): 818--823.
+
+\bibitem[{DerSimonian and Laird(1986)}]{dersimonian1986meta}
+DerSimonian, R.; and Laird, N. 1986.
+\newblock Meta-Analysis in Clinical Trials.
+\newblock \emph{Controlled Clinical Trials}, 7(3): 177--188.
+
+\bibitem[{Fernandez et~al.(2023)Fernandez, Chaffin, Tit, Chappelier, and
+  Furon}]{fernandez2023threebricks}
+Fernandez, P.; Chaffin, A.; Tit, K.; Chappelier, V.; and Furon, T. 2023.
+\newblock Three Bricks to Consolidate Watermarks for Large Language Models.
+\newblock In \emph{IEEE International Workshop on Information Forensics and
+  Security (WIFS)}.
+
+\bibitem[{He and Vechev(2023)}]{he2023sven}
+He, J.; and Vechev, M. 2023.
+\newblock Large Language Models for Code: Security Hardening and Adversarial
+  Testing.
+\newblock In \emph{Proceedings of the 2023 ACM SIGSAC Conference on Computer
+  and Communications Security (CCS)}.
+
+\bibitem[{Hui et~al.(2024)Hui, Yang, Cui, Yang, Liu, Zhang, Liu, Zhang, Yu, Lu,
+  Dang, Fan, Zhang, Yang, Men, Huang, Zheng, Miao, Quan, Feng, Ren, Ren, Zhou,
+  and Lin}]{hui2024qwen25coder}
+Hui, B.; Yang, J.; Cui, Z.; Yang, J.; Liu, D.; Zhang, L.; Liu, T.; Zhang, J.;
+  Yu, B.; Lu, K.; Dang, K.; Fan, Y.; Zhang, Y.; Yang, A.; Men, R.; Huang, F.;
+  Zheng, B.; Miao, Y.; Quan, S.; Feng, Y.; Ren, X.; Ren, X.; Zhou, J.; and Lin,
+  J. 2024.
+\newblock {Qwen2.5-Coder} Technical Report.
+\newblock \emph{arXiv preprint arXiv:2409.12186}.
+
+\bibitem[{Jovanovi{\'c}, Staab, and Vechev(2024)}]{jovanovic2024stealing}
+Jovanovi{\'c}, N.; Staab, R.; and Vechev, M. 2024.
+\newblock Watermark Stealing in Large Language Models.
+\newblock In \emph{Proceedings of the 41st International Conference on Machine
+  Learning}, volume 235 of \emph{Proceedings of Machine Learning Research},
+  22570--22593. PMLR.
+
+\bibitem[{Kirchenbauer et~al.(2023)Kirchenbauer, Geiping, Wen, Katz, Miers, and
+  Goldstein}]{kirchenbauer2023watermark}
+Kirchenbauer, J.; Geiping, J.; Wen, Y.; Katz, J.; Miers, I.; and Goldstein, T.
+  2023.
+\newblock A Watermark for Large Language Models.
+\newblock In \emph{Proceedings of the 40th International Conference on Machine
+  Learning}, volume 202 of \emph{Proceedings of Machine Learning Research},
+  17061--17084. PMLR.
+
+\bibitem[{Kirchenbauer et~al.(2024)Kirchenbauer, Geiping, Wen, Shu, Saifullah,
+  Kong, Fernando, Saha, Goldblum, and Goldstein}]{kirchenbauer2024reliability}
+Kirchenbauer, J.; Geiping, J.; Wen, Y.; Shu, M.; Saifullah, K.; Kong, K.;
+  Fernando, K.; Saha, A.; Goldblum, M.; and Goldstein, T. 2024.
+\newblock On the Reliability of Watermarks for Large Language Models.
+\newblock In \emph{The Twelfth International Conference on Learning
+  Representations}.
+
+\bibitem[{Kuditipudi et~al.(2024)Kuditipudi, Thickstun, Hashimoto, and
+  Liang}]{kuditipudi2024robust}
+Kuditipudi, R.; Thickstun, J.; Hashimoto, T.; and Liang, P. 2024.
+\newblock Robust Distortion-Free Watermarks for Language Models.
+\newblock \emph{Transactions on Machine Learning Research}.
+
+\bibitem[{Lee et~al.(2024)Lee, Hong, Ahn, Hong, Lee, Yun, Shin, and
+  Kim}]{lee2024sweet}
+Lee, T.; Hong, S.; Ahn, J.; Hong, I.; Lee, H.; Yun, S.; Shin, J.; and Kim, G.
+  2024.
+\newblock Who Wrote this Code? Watermarking for Code Generation.
+\newblock In \emph{Proceedings of the 62nd Annual Meeting of the Association
+  for Computational Linguistics (Volume 1: Long Papers)}, 4890--4911.
+
+\bibitem[{Mao et~al.(2025)Mao, Wei, Chen, Fang, and Chau}]{mao2025unbiased}
+Mao, M.; Wei, D.; Chen, Z.; Fang, X.; and Chau, M. 2025.
+\newblock Watermarking Large Language Models: An Unbiased and Low-risk Method.
+\newblock In \emph{Proceedings of the 63rd Annual Meeting of the Association
+  for Computational Linguistics (Volume 1: Long Papers)}, 7939--7960.
+
+\bibitem[{McNemar(1947)}]{mcnemar1947note}
+McNemar, Q. 1947.
+\newblock Note on the Sampling Error of the Difference Between Correlated
+  Proportions or Percentages.
+\newblock \emph{Psychometrika}, 12(2): 153--157.
+
+\bibitem[{Pan et~al.(2024)Pan, Liu, He, Gao, Zhao, Lu, Zhou, Liu, Hu, Wen,
+  King, and Yu}]{pan2024markllm}
+Pan, L.; Liu, A.; He, Z.; Gao, Z.; Zhao, X.; Lu, Y.; Zhou, B.; Liu, S.; Hu, X.;
+  Wen, L.; King, I.; and Yu, P.~S. 2024.
+\newblock {MarkLLM}: An Open-Source Toolkit for {LLM} Watermarking.
+\newblock In \emph{Proceedings of the 2024 Conference on Empirical Methods in
+  Natural Language Processing: System Demonstrations}, 61--71.
+
+\bibitem[{Pearce et~al.(2022)Pearce, Ahmad, Tan, Dolan-Gavitt, and
+  Karri}]{pearce2022asleep}
+Pearce, H.; Ahmad, B.; Tan, B.; Dolan-Gavitt, B.; and Karri, R. 2022.
+\newblock Asleep at the Keyboard? {A}ssessing the Security of {GitHub}
+  {Copilot}'s Code Contributions.
+\newblock In \emph{2022 IEEE Symposium on Security and Privacy (SP)}, 754--768.
+
+\bibitem[{Peng et~al.(2025)Peng, Cui, Huang, Yang, and Ray}]{peng2025cweval}
+Peng, J.; Cui, L.; Huang, K.; Yang, J.; and Ray, B. 2025.
+\newblock {CWEval}: Outcome-driven Evaluation on Functionality and Security of
+  {LLM} Code Generation.
+\newblock In \emph{2025 IEEE/ACM International Workshop on Large Language
+  Models for Code (LLM4Code)}.
+\newblock ArXiv:2501.08200.
+
+\bibitem[{Piet et~al.(2023)Piet, Sitawarin, Fang, Mu, and
+  Wagner}]{piet2023markmywords}
+Piet, J.; Sitawarin, C.; Fang, V.; Mu, N.; and Wagner, D. 2023.
+\newblock Mark My Words: Analyzing and Evaluating Language Model Watermarks.
+\newblock \emph{arXiv preprint arXiv:2312.00273}.
+
+\bibitem[{Siddiq and Santos(2022)}]{siddiq2022securityeval}
+Siddiq, M.~L.; and Santos, J. C.~S. 2022.
+\newblock {SecurityEval} Dataset: Mining Vulnerability Examples to Evaluate
+  Machine Learning-Based Code Generation Techniques.
+\newblock In \emph{Proceedings of the 1st International Workshop on Mining
+  Software Repositories Applications for Privacy and Security (MSR4P\&S)},
+  29--33.
+
+\bibitem[{Suresh et~al.(2024)Suresh, Ugare, Singh, and
+  Misailovic}]{suresh2024robust}
+Suresh, T.; Ugare, S.; Singh, G.; and Misailovic, S. 2024.
+\newblock Is The Watermarking Of {LLM}-Generated Code Robust?
+\newblock \emph{arXiv preprint arXiv:2403.17983}.
+\newblock A short version appeared in the ICLR 2024 Tiny Papers track.
+
+\bibitem[{Tu et~al.(2024)Tu, Sun, Bai, Yu, Hou, and Li}]{tu2024waterbench}
+Tu, S.; Sun, Y.; Bai, Y.; Yu, J.; Hou, L.; and Li, J. 2024.
+\newblock {WaterBench}: Towards Holistic Evaluation of Watermarks for Large
+  Language Models.
+\newblock In \emph{Proceedings of the 62nd Annual Meeting of the Association
+  for Computational Linguistics (Volume 1: Long Papers)}, 1517--1542.
+
+\bibitem[{Wilson(1927)}]{wilson1927probable}
+Wilson, E.~B. 1927.
+\newblock Probable Inference, the Law of Succession, and Statistical Inference.
+\newblock \emph{Journal of the American Statistical Association}, 22(158):
+  209--212.
+
+\bibitem[{Wolf et~al.(2020)Wolf, Debut, Sanh, Chaumond, Delangue, Moi, Cistac,
+  Rault, Louf, Funtowicz, Davison, Shleifer, von Platen, Ma, Jernite, Plu, Xu,
+  Le~Scao, Gugger, Drame, Lhoest, and Rush}]{wolf2020transformers}
+Wolf, T.; Debut, L.; Sanh, V.; Chaumond, J.; Delangue, C.; Moi, A.; Cistac, P.;
+  Rault, T.; Louf, R.; Funtowicz, M.; Davison, J.; Shleifer, S.; von Platen,
+  P.; Ma, C.; Jernite, Y.; Plu, J.; Xu, C.; Le~Scao, T.; Gugger, S.; Drame, M.;
+  Lhoest, Q.; and Rush, A. 2020.
+\newblock Transformers: State-of-the-Art Natural Language Processing.
+\newblock In \emph{Proceedings of the 2020 Conference on Empirical Methods in
+  Natural Language Processing: System Demonstrations}, 38--45.
+
+\bibitem[{Zhao et~al.(2024)Zhao, Ananth, Li, and Wang}]{zhao2024provable}
+Zhao, X.; Ananth, P.; Li, L.; and Wang, Y.-X. 2024.
+\newblock Provable Robust Watermarking for {AI}-Generated Text.
+\newblock In \emph{The Twelfth International Conference on Learning
+  Representations}.
+
+\end{thebibliography}

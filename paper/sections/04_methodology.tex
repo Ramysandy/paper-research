@@ -1,0 +1,98 @@
+\section{Method: A Paired, Fail-Closed Key Audit}
+\label{sec:method}
+
+\begin{figure*}[t]
+\centering
+\begin{tikzpicture}[
+  font=\small,
+  box/.style={draw, rounded corners=2pt, align=center, minimum height=1.05cm, text width=2.35cm, inner sep=3pt},
+  gate/.style={draw, densely dashed, align=center, minimum height=0.8cm, text width=2.35cm, inner sep=3pt},
+  arr/.style={-{Latex[length=2mm]}, thick},
+  node distance=0.42cm]
+\node[box] (keys) {\textbf{Key registry}\\$\kappa_k=\mathrm{SHA256}(\cdot)$\\63-bit, opaque IDs};
+\node[box, right=of keys] (gen) {\textbf{Paired generation}\\same $(\tau,s)$ for $\Base,\kappa_1,\dots,\kappa_n$};
+\node[box, right=of gen] (rec) {\textbf{Provenance record}\\token IDs, $g$, $T$, $z$,\\config hash, errors};
+\node[box, right=of rec] (eval) {\textbf{Sandboxed scoring}\\networkless, fail-closed\\$\Fn,\ \Sec,\ \Y$};
+\node[box, right=of eval] (ana) {\textbf{Clustered analysis}\\$\hat\Delta$, $\hat\sigma^2_\K$, CWE strata};
+\node[gate, below=0.45cm of gen] (g1) {\textbf{Gate M}: processor/\\detector conformance};
+\node[gate, below=0.45cm of rec] (g2) {\textbf{Gate N}: key-specific\\null, positive shift};
+\node[gate, below=0.45cm of eval] (g3) {\textbf{Gate O}: oracle\\non-degeneracy};
+\node[gate, below=0.45cm of ana] (g4) {\textbf{Decision}: go /\\marginal / stop};
+\draw[arr] (keys) -- (gen);
+\draw[arr] (gen) -- (rec);
+\draw[arr] (rec) -- (eval);
+\draw[arr] (eval) -- (ana);
+\draw[arr, densely dashed] (g1) -- (gen);
+\draw[arr, densely dashed] (g2) -- (rec);
+\draw[arr, densely dashed] (g3) -- (eval);
+\draw[arr, densely dashed] (ana) -- (g4);
+\end{tikzpicture}
+\caption{Audit pipeline. Solid arrows show the data path for one task--seed pair, which is generated once without a watermark and once under every key. Dashed boxes are preregistered gates. A failed gate stops the pipeline: no outcome is interpreted until gates M--O pass.}
+\label{fig:pipeline}
+\end{figure*}
+
+Figure~\ref{fig:pipeline} shows the pipeline. Its design principle is that every comparison is paired, and every stage fails closed rather than silently degrading.
+
+\subsection{Keys and Paired Generation}
+Keys are derived deterministically from a study seed $\sigma_0$: $\kappa_i=\big(\mathrm{SHA256}(\sigma_0\Vert\texttt{kgw}\Vert i)_{[0:8]}\wedge(2^{63}-1)\big)\vee\mathbb{1}[\cdot=0]$, which yields non-sequential, non-zero signed-63-bit integers. The registry rejects collisions, and public reports use only opaque labels \texttt{K0000}, \texttt{K0001}, $\ldots$ Hashing avoids the obvious confound of sequential keys and keeps raw key values out of artifacts. For every $(\tau,s)$, the model, prompt, decoding parameters and seed are held fixed while the arm $\kappa\in\{\Base,\kappa_1,\ldots,\kappa_n\}$ varies. Each record stores the prompt hash, output token IDs, scored-token count $T$, green count $g$, $z$, $p$-value, configuration hash, model revision, tokenizer hash and any error. Generation is resumable: completed units are skipped, and failures are written as explicit error rows rather than dropped.
+
+\subsection{Outcome Evaluation}
+Source code is extracted from a matching fenced block or raw output after newline normalisation; NUL bytes and oversized outputs are rejected, and the source is hashed. Security uses deterministic family-specific oracles: Python AST/API checks (e.g.\ \texttt{shell=True}, unsafe YAML loaders, disabled TLS verification) and C checks (e.g.\ attacker-controlled format strings, unbounded copies). Indeterminate evidence returns $\bot$ rather than a fabricated ``secure''. Functionality is tested by compiling C11 or importing Python inside an Apptainer container with \texttt{--containall}, \texttt{--network none}, a clean environment, read-only inputs and CPU, memory, file and process limits. A preflight that must fail to open a socket runs before any generated code executes. If isolation cannot be established, scoring aborts.
+
+\subsection{Manipulation and Oracle Gates}
+\label{sec:gates}
+\textbf{Gate M (conformance).} A model-free test builds sequences only from tokens that the reference processor actually biased, and requires the matching detector to score at least 98\% of them green for every key. The detector $z$ is recomputed independently from $(g,T)$ via Eq.~\eqref{eq:z}, and any disagreement is a hard error. \textbf{Gate N (null and shift).} Every output, watermarked or not, is cross-scored under every detector key. The key-specific unwatermarked false-positive rate at $z^\star$ must be at most 1\%, matching-key detection at least 80\%, and every key must show a positive paired $z$ shift over the same $(\tau,s)$ baseline. \textbf{Gate O (oracle).} Within each CWE family, security labels must vary across outputs; a family whose oracle labels every output identically cannot carry a security effect.
+
+\subsection{Statistical Analysis}
+Rows are not independent: tasks recur across keys and seeds, and all keys share one baseline. We therefore estimate effects on paired $(\tau,s)$ cells and use a task-level cluster bootstrap for intervals. Two properties guide the analysis.
+
+\begin{proposition}[Baseline invariance of key contrasts]\label{prop:baseline}
+Let $\hat\mu_\Base,\hat\mu_1,\ldots,\hat\mu_n$ be any estimates on the same cells and $\hat\Delta_k=\hat\mu_k-\hat\mu_\Base$. Then (a) $\hat\Delta_k-\hat\Delta_{k'}=\hat\mu_k-\hat\mu_{k'}$ for all $k,k'$, so the sample variance of $\{\hat\Delta_k\}$ equals that of $\{\hat\mu_k\}$; and (b) if $\hat\mu_\Base$ is uncorrelated with each $\hat\mu_k$, then $\Cov(\hat\Delta_k,\hat\Delta_{k'})=\Cov(\hat\mu_k,\hat\mu_{k'})+\Var(\hat\mu_\Base)$.
+\end{proposition}
+\begin{proof}
+(a) The term $\hat\mu_\Base$ cancels in each difference, and the sample variance depends only on pairwise differences. (b) Expand by bilinearity: the cross terms vanish under the assumption, leaving $\Var(\hat\mu_\Base)$.
+\end{proof}
+
+Part (a) means that a heterogeneity test is a purely within-watermark comparison: no baseline, however noisy, can create or remove between-key variance. Part (b) means that $n$ per-key tests against a shared baseline are positively correlated, so counting how many keys ``beat the baseline'' overstates the evidence for $\ATE$. We estimate $\sigma^2_\K$ with a method-of-moments estimator $\hat\sigma^2_\K=\max\{0,\,s^2_{\hat\mu}-\overline{v}\}$, where $s^2_{\hat\mu}$ is the across-key sample variance and $\overline{v}$ the mean within-key sampling variance \citep{dersimonian1986meta}. For valid inference $\overline{v}$ must come from the cluster bootstrap, not from the binomial formula.
+
+\begin{assumption}\label{ass:bern}
+Under key $\kappa$, the green indicators of the $T$ scored tokens are independent Bernoulli$(p)$ variables with $p>\gamma$.
+\end{assumption}
+
+\begin{proposition}[Length requirement for detection]\label{prop:length}
+Under Assumption~\ref{ass:bern}, $\E[z_\kappa]=\sqrt{T}\,(p-\gamma)/\sqrt{\gamma(1-\gamma)}$, and $\E[z_\kappa]\ge z^\star$ if and only if
+\begin{equation}
+T\;\ge\;T_{\min}(p)=\frac{(z^\star)^2\,\gamma(1-\gamma)}{(p-\gamma)^2}.
+\label{eq:tmin}
+\end{equation}
+\end{proposition}
+\begin{proof}
+$\E[g]=pT$; substitute into Eq.~\eqref{eq:z} and solve $\E[z]\ge z^\star$ for $T$.
+\end{proof}
+
+With $\gamma=0.25$ and $z^\star=4$, the bound gives $T_{\min}=300$ tokens at $p=0.35$ and $T_{\min}=133$ at $p=0.40$. Low-entropy code positions keep the realised $p$ close to $\gamma$ regardless of $\delta$ \citep{lee2024sweet}. As a result, per-output detection of programs under ${\sim}100$ tokens is expected to be weak even when the implementation is correct. Low per-output detection is therefore not, by itself, evidence of misalignment. A \emph{negative} mean $z$ under the matching key, however, is not explained by Eq.~\eqref{eq:tmin} and triggers Gate~N.
+
+\begin{algorithm}[t]
+\caption{Paired KGW key audit}
+\label{alg:audit}
+\begin{algorithmic}[1]
+\REQUIRE model $M$, tasks $\T$ (discovery/held-out split), seeds $\Sd$, keys $\K_n$, $(\gamma,\delta,h)$, $z^\star$
+\STATE Run Gate M for every $\kappa\in\K_n$; \textbf{abort} on failure
+\FOR{$\tau\in\T$, $s\in\Sd$}
+  \STATE $y_\Base\leftarrow\mathrm{Gen}(M,\tau,s,\Base)$
+  \FOR{$\kappa\in\K_n$}
+    \STATE $y_\kappa\leftarrow\mathrm{Gen}(M,\tau,s,\kappa)$; store $(g,T,z_\kappa(y_\kappa))$ or an error row
+  \ENDFOR
+\ENDFOR
+\STATE Cross-score all $y$ under all $\kappa$; run Gate N; \textbf{abort} on failure
+\STATE Score $(\Fn,\Sec,\Y)$ in the sandbox; run Gate O; \textbf{abort} on failure
+\STATE Estimate $\hat\Delta$, $\hat\sigma^2_\K$ with a task-cluster bootstrap
+\STATE Select tail keys on discovery tasks; validate on held-out tasks only
+\RETURN preregistered go / marginal / stop decision
+\end{algorithmic}
+\end{algorithm}
+
+\subsection{Decision Rule and Complexity}
+The preregistered primary comparison is the held-out secure-and-functional gap between low-risk and high-risk tail keys, selected on discovery tasks only. \emph{Go} requires a gap of at least 5\,pp with a 95\% interval excluding zero, a functional difference of at most 3\,pp, normal detection, and an absolute Spearman correlation of at least 0.30 between a pre-generation token-audit score and outcomes. \emph{Stop} applies if the upper bound is below 3\,pp and the correlation is below 0.20. All other outcomes are \emph{marginal}.
+
+\textbf{Complexity.} Algorithm~\ref{alg:audit} issues $|\T||\Sd|(n+1)$ generations. Cross-scoring adds $|\T||\Sd|(n+1)n$ detector passes, which are cheap relative to generation but quadratic in $n$. With a permutation-based green list, each biased step costs $O(|\V|)$ on top of the forward pass, and self-hashing multiplies this by the number of candidates checked. Memory is dominated by the model. Records grow linearly with the number of generations.
